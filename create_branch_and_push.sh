@@ -20,19 +20,25 @@ OLD_IFS=$IFS
 IFS=$','
 for repo in $ANSIBLE_REPOS
 do
+echo "cloning repo $repo"
 	if [ -d "$repo" ]; then
 	   echo "Repo already present"
 	else
-		git clone $GIT_BASE_URL/$repo.git
+		git clone --quiet $GIT_BASE_URL/$repo.git
 	fi
+	
+	if [ $? == "0" ]; then
+
 	cd $current_dir/$repo
-	echo "current_dir=`pwd`"
-	git fetch --all
-	git checkout $branch
-	git pull
+	git fetch --quiet --all
+	git checkout --quiet $branch
+	git pull --quiet
 	git checkout -b $new_branch $branch
 	# git branch --set-upstream-to=origin/$new_branch $new_branch
 	git push -u origin $new_branch
 	cd -
+	else
+		echo "something went wrong with $repo"
+	fi
 done
 IFS=$OLD_IFS
