@@ -16,6 +16,8 @@ fi
 branch=$1
 new_branch=$2
 current_dir=`pwd`
+OLD_IFS=$IFS
+IFS=$','
 for repo in $ANSIBLE_REPOS
 do
 	if [ -d "$repo" ]; then
@@ -33,3 +35,4 @@ do
 	git push -u origin $new_branch
 	cd -
 done
+IFS=$OLD_IFS
