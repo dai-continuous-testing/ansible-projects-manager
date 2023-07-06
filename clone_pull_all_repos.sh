@@ -21,7 +21,8 @@ for repo in $ANSIBLE_REPOS; do
 		git clone --quiet $GIT_BASE_URL/$repo.git
 	fi
 
-	if [ $? == "0" ]; then
+	# Making sure we have repo there.
+	if [ -d "$repo" ]; then
 	  	cd $current_dir/$repo
 	  	# echo "current_dir=`pwd`"
 	  	git fetch --quiet --all
