@@ -20,23 +20,26 @@ OLD_IFS=$IFS
 IFS=$','
 for repo in $ANSIBLE_REPOS
 do
-	echo -e "\n-------------------------------------------------------"
-	echo "$repo"
+	echo "cloning repo $repo"
 	if [ -d "$repo" ]; then
-	   echo "folder already exists"
+		echo "folder already exists"
 	else
-		git clone $GIT_BASE_URL/$repo.git
+		git clone --quiet $GIT_BASE_URL/$repo.git
 	fi
-	cd $current_dir/$repo
-	echo "current_dir=`pwd`"
-	git fetch --all
-	if [ "$DRY_RUN" == "yes" ]; then
-		echo "$repo : $new_branch will be created from $branch"
+
+	if [ $? == "0" ]; then
+		cd $current_dir/$repo
+		echo "current_dir=`pwd`"
+		git fetch --all
+		if [ "$DRY_RUN" == "yes" ]; then
+			echo "$repo : $new_branch will be created from $branch"
+		else
+			git checkout -b $new_branch $branch
+			# git branch --set-upstream-to=origin/$new_branch $new_branch
+			git push -u origin $new_branch
+		fi
 	else
-		git checkout -b $new_branch $branch
-		# git branch --set-upstream-to=origin/$new_branch $new_branch
-		git push -u origin $new_branch
+		echo "something went wrong with $repo"
 	fi
-	cd -
 done
 IFS=$OLD_IFS
