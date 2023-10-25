@@ -9,3 +9,8 @@ These scripts are to aid developers in worflows invoving ansible projects in exp
 
 ## Notes: 
 ### When a new ansible role for a component is added, You need to update the list in .env file
+
+## Usage:
+
+1. sh clone_pull_all_repos.sh
+2. sh create_branch_and_push.sh master 23.10
